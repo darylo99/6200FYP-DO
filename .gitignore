@@ -1,0 +1,5 @@
+# Don't track database
+db.sqlite3
+
+# Don't track django settings
+SpeakableAuth/settings.py

@@ -1,0 +1,100 @@
+{% extends 'baseline.html' %}
+{% block title %}<title>Token View</title>{% endblock %}
+{% block pagetitle %}<h1>Token for {{ token_name }}</h1>{% endblock %}
+{% block content %}
+
+<!-- jsOTP - Licensed with the MIT License -->
+<!-- https://github.com/jiangts/JS-OTP -->
+<script type="text/javascript" src="{% static 'js/jsOTP-es5.min.js' %}"></script>
+<!-- Words file (JSON Array containing all words from /usr/share/dict/words) -->
+<script id="dict" type="application/json" src="{% static 'words.json' %}"  integrity="NzE1MjRkYmEzZTJiZTMyNTU3ZmM0NTNhYWQ3MTJhMzU4YzQyOTYxMjU2NzNmYWFmZjA1ODUyMTNm
+NDU4MTRmNTUyMWVkOGEyOTZiOGZmYmZkZGIyY2FhZWNkZDhmYzY4Cg=="></script>
+
+<!--   -->
+<script type="text/javascript">
+  Config = {
+    /*
+    Configuration settings to help with code maintainability, probably could be
+    left as it is.
+
+    However, not useful atm... may be removed
+    */
+  }
+
+  Words = function(){
+    /*
+    Used to access the words file.
+    Returns a function to access a word on a given line.
+
+
+
+    1 Get all words
+    2 Check if its an array
+      If not and set flag
+    3 Return getter function to global scope
+    */
+
+    const ALLWORDS = JSON.parse(document.getElementById("dict").innerHTML);
+    let wordsInArray = false;
+
+    if (ALLWORDS.isArray()){
+      console.log("Words in an acceptable format");
+      wordsInArray = true;
+    } else {
+      console.log("Words not in acceptable format");
+    }
+
+    function getWord(index){
+      /*
+      Get a word with a given index
+
+      Parameter validation
+      ALLWORDS sanity check
+      Access word with index index
+      */
+
+      console.log("Getting word..");
+      if (isNaN(index) || !wordsInArray ) {
+        console.log("Parameter is incorrect type! Returning nothing")
+        return null;
+      } else {
+        const wordsLength = ALLWORDS.length;
+        return ALLWORDS[index % wordsLength];
+      }
+
+    }
+
+    return { getWord: getWord };
+  }();
+
+  Token = function(){
+
+    const TX = 10;
+    /* !!!! UNKNOWN BEHAVIOUR !!!!! Possible cause of problems */
+    const K = Uint8Array()[JSON.parse( {{ key }} )];
+
+    var calculateCode = function(){
+      console.log("Calculating Code..");
+    }
+
+    return {
+      "calculateCode": calculateCode
+    };
+  }();
+</script>
+
+<!-- User view -->
+<div class="col-sm">
+  <h1>Your word</h1>
+  <h3 id="clientWord"> -- </h3>
+</div>
+
+<div class="col-sm">
+  <h1>{{ name }}'s Word</h1>
+  <h3 id="businessWord"> -- </h3>
+</div>
+
+<!-- File to handle otp word index generation -->
+<script type=text/javascript src="{% static 'js/generator.js'%}" charset="utf-8"></script>
+
+{% endblock %}
