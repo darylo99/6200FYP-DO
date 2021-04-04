@@ -1,12 +1,21 @@
-/*
-Gets DOM elements displaying codes and update them with new ones
-*/
+"use strict";
+Token = function(){
+  /*
+    Using a similar naming convention as RFC6238 for vars
+     TX -> Length of validity for OTPs
+     K -> Key
+     (T0 is unix epoch and infered from Date().getTime() method)
+  */
 
-/*
- - Get elements
- - Get current words
- - Calc new words
- - Update DOM with new words
- - Add old words as fallback
- - ^^ Do above on interval
-*/
+  const TX = 10;
+  /* !!!! UNKNOWN BEHAVIOUR !!!!! Possible cause of problems */
+  const K = Uint8Array()[JSON.parse( {{ key }} )];
+
+  calculateCode = function(){
+    console.log("Calculating Code..");
+  }
+
+  return {
+    "calculateCode": calculateCode
+  };
+}();
