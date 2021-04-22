@@ -19,10 +19,17 @@ from django.urls import path
 from django.urls import include
 from django.views.generic import RedirectView
 
+"""
+URL patterns separated to make it easier for me to read.
+"""
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+# Django Auth URLs
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
 
 # Add words app urls and redirect '/' to '/words/'
 urlpatterns += [

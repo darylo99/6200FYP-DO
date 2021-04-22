@@ -1,0 +1,12 @@
+{% extends 'baseline.html' %}
+{% block title %}<title>Speakable Auth - Log In</title>{% endblock %}
+{% block pagetitle %}<h1>Log In</h1>{% endblock %}
+
+{% block content %}
+<h2>Log In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log In</button>
+</form>
+{% endblock %}

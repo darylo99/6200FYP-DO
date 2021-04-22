@@ -15,17 +15,16 @@ def index(request):
          Render template and pass context
 
     """
-    tokens = Token.objects.filter(account__exact=request.user.id)
-    num_tokens = tokens.count()
+    tokens = Token.objects.filter(accounts__id__contains=request.user.id)
     context = {
-        "num_tokens": num_tokens,
+        "num_tokens": Token.objects.count(),
         "tokens": tokens
     }
-    render(request, 'index.html', context=context)
+    return render(request, 'index.html', context=context)
 
 
 @login_required
-def show_token(request, token_id):
+def show_token(request, pk):
     """
         View function to get token key
         request: HTTP request
@@ -37,20 +36,21 @@ def show_token(request, token_id):
         Render details
     """
     try:
-        token = Token.objects.get(pk=token_id)
-        if token.account != request.user.id:
-            raise Http404('Token does not belong to this account') # !!!!!!!!!!!!!!!!!! CHANGE
-        else:
+        token = Token.objects.get(pk=pk)
+        if token in Token.objects.filter(accounts__id__contains=request.user.id):
             if not token.key: # Generate token key if it doesnt exist
                 token.key = token_bytes(16)
                 token.save()
 
+            #
             context = {
                 "name": token.title,
                 "key": json.dumps(list(token.key))
             }
 
-            render(request, 'token.html', context=context)
+            return render(request, 'token.html', context=context)
+        else:
+            raise Http404('Token not found') # Probably should be a 403 but leaving it ambiguous..
 
     except Token.DoesNotExist:
-        raise Http404('Token does not exist')
+        raise Http404('Token not found')

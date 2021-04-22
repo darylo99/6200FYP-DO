@@ -1,0 +1,97 @@
+{% extends 'baseline.html' %}
+{% block title %}<title>Token View</title>{% endblock %}
+{% block pagetitle %}<h1>Token for {{ token_name }}</h1>{% endblock %}
+{% block content %}
+{% load static %}
+<!--
+  TODO:
+    Remove unneccary code
+    Check running time of updateWords()
+    Adjust setInterval limit
+
+-->
+
+
+<!-- UMD jsSHA module definition. UMD to ensure max compatibility   -->
+<!-- SHA1 only as HMAC-SHA1 needed only -->
+<script type="text/javascript" src="{% static 'js/sha1.js' %}"></script>
+
+<!-- MAY NOT BE NEEDED: jsOTP - Licensed with the MIT License -->
+<!-- https://github.com/jiangts/JS-OTP -->
+<!--<script type="text/javascript" src="{% static 'js/jsOTP-es5.min.js' %}"></script> -->
+
+
+<script type="text/javascript">
+  "use strict";
+  var Config = {
+    /*
+    Configuration settings to help with code maintainability, probably could be
+    left as it is.
+
+    NOTE
+    Naming convention
+     (T0 is unix epoch and infered from Date().getTime() method)
+      time_step -> X -> Time Step Value
+      key -> K
+
+    !!!! UNKNOWN BEHAVIOUR FOR Config.key !!!!! Possible cause of problems
+    */
+    time_step: 10,
+    key: new Uint8Array( {{ key }} ),
+    dict: null,
+    dictlen: null
+  };
+
+</script>
+
+<!-- Sets Config.dict and Config.dictlen -->
+<!-- (JS Array from unix /usr/share/dict/words and length) -->
+<script id="dict" type="text/javascript" src="{% static 'js/dict.js' %}"></script>
+
+<!-- File to handle otp word generation -->
+<script type=text/javascript src="{% static 'js/words.js'%}" charset="utf-8"></script>
+
+
+<!-- User view -->
+<div class="col-sm">
+  <h1>Your word</h1>
+  <h3 id="clientWord"> -- </h3>
+</div>
+
+<div class="col-sm">
+  <h1>{{ name }}'s Word</h1>
+  <h3 id="businessWord"> -- </h3>
+
+</div>
+
+<script type="text/javascript">
+  "use strict";
+  try {
+
+    /*
+     - Get elements
+     - Calc new words
+     - Update DOM with new words
+     - ^^ Do above on interval
+    */
+
+    function updateWords(){
+      let businessWord = document.getElementById("businessWord");
+      let clientWord = document.getElementById("clientWord");
+
+      let newWords = Words.getWords();
+      businessWord.innerHTML = newWords[0] + "";
+      clientWord.innerHTML = newWords[1] + "";
+    }
+
+    setInterval(updateWords, 1500);
+  }
+  catch(err){
+    console.log("An error occured: " + err);
+    alert("An error occured");
+  }
+
+</script>
+
+
+{% endblock %}
