@@ -44,7 +44,6 @@ def show_token(request, pk):
 
             #
             context = {
-                "name": token.title,
                 "key": json.dumps(list(token.key))
             }
 

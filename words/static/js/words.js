@@ -90,11 +90,6 @@ var Words = (function() {
     const hmacBusiness = shaObjBusiness.getHMAC("UINT8ARRAY");
     const hmacClient = shaObjClient.getHMAC("UINT8ARRAY");
 
-    //!!!!!!!!!!!! Just for testing, due to be removed
-    console.log("HMAC business: " + hmacBusiness);
-    console.log("HMAC client: " + hmacClient);
-    //!!!!!
-
     return [
       truncate(hmacBusiness),
       truncate(hmacClient)

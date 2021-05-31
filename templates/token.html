@@ -54,12 +54,12 @@
 
 <!-- User view -->
 <div class="col-sm">
-  <h1>Your word</h1>
+  <h1>Client word</h1>
   <h3 id="clientWord"> -- </h3>
 </div>
 
 <div class="col-sm">
-  <h1>{{ name }}'s Word</h1>
+  <h1>Business Word</h1>
   <h3 id="businessWord"> -- </h3>
 
 </div>
@@ -76,12 +76,17 @@
     */
 
     function updateWords(){
+      //let t0 = performance.now();
+
       let businessWord = document.getElementById("businessWord");
       let clientWord = document.getElementById("clientWord");
 
       let newWords = Words.getWords();
       businessWord.innerHTML = newWords[0] + "";
       clientWord.innerHTML = newWords[1] + "";
+
+      //let t1 = performance.now();
+      //console.log(`Call to generate words took ${t1 - t0} milliseconds.`);
     }
 
     setInterval(updateWords, 1500);
